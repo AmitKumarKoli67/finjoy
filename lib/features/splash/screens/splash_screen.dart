@@ -1,4 +1,4 @@
-import 'package:finjoy/features/dashboard/screens/dashboard_screen.dart';
+import 'package:finjoy/shared/widgets/bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => DashboardScreen()),
+        MaterialPageRoute(builder: (_) => BottomNavScreen()),
       );
     });
   }
