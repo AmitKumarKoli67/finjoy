@@ -1,3 +1,4 @@
+import 'package:finjoy/features/transactions/screens/add_transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finjoy/features/dashboard/screens/dashboard_screen.dart';
 // import other screens later
@@ -22,29 +23,29 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-  index: _currentIndex,
-  children: _screens,
-),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFF1A1A2E),
         selectedItemColor: const Color(0xFF7C6FFF),
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        onTap: (index) {
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AddTransactionScreen()),
+            );
+          } else {
+            setState(() => _currentIndex = index);
+          }
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
             label: 'Dashboard',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Activity',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle),
-            label: 'Add',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Activity'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: 'Add'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',

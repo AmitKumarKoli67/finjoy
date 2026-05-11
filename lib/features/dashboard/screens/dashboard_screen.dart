@@ -1,7 +1,10 @@
+import 'package:finjoy/data/models/transaction_model.dart';
 import 'package:finjoy/features/dashboard/widgets/balance_card.dart';
 import 'package:finjoy/features/dashboard/widgets/income_expense_row.dart';
 import 'package:finjoy/features/dashboard/widgets/transaction_item.dart';
+import 'package:finjoy/features/transactions/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -11,6 +14,11 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<TransactionCubit>().loadTransactions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,54 +51,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Balance Card
-            BalanceCard(balance: '₹42,850.00'),
+      body: BlocBuilder<TransactionCubit, TransactionState>(
+        builder: (context, state) {
+          List<TransactionModel> transactions = [];
+          if (state is TransactionLoaded) {
+            transactions = state.transactions;
+          }
 
-            const SizedBox(height: 16),
+          double totalBalance = transactions.fold(
+            0,
+            (sum, t) => t.isIncome ? sum + t.amount : sum - t.amount,
+          );
+          double totalIncome = transactions
+              .where((t) => t.isIncome)
+              .fold(0, (sum, t) => sum + t.amount);
+          double totalExpense = transactions
+              .where((t) => !t.isIncome)
+              .fold(0, (sum, t) => sum + t.amount);
 
-            // Income and Expense Row
-            IncomeExpenseRow(income: '+₹8,400', expense: '-₹3,120'),
-
-            const SizedBox(height: 24),
-
-            // Recent Transactions
-            const Text(
-              'Recent Transactions',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BalanceCard(balance: '₹${totalBalance.toStringAsFixed(2)}'),
+                const SizedBox(height: 16),
+                IncomeExpenseRow(
+                  income: '+₹${totalIncome.toStringAsFixed(2)}',
+                  expense: '-₹${totalExpense.toStringAsFixed(2)}',
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Recent Transactions',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ...transactions.map(
+                  (t) => TransactionItem(
+                    title: t.title,
+                    subtitle: t.category,
+                    amount:
+                        '${t.isIncome ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
+                    color: t.isIncome ? Colors.green : Colors.red,
+                  ),
+                ),
+              ],
             ),
-
-            const SizedBox(height: 12),
-
-            // Transaction Items
-            TransactionItem(
-              title: 'Grocery Store',
-              subtitle: 'Food',
-              amount: '-₹120',
-              color: Colors.red,
-            ),
-            TransactionItem(
-              title: 'Monthly Rent',
-              subtitle: 'Housing',
-              amount: '-₹2,100',
-              color: Colors.red,
-            ),
-            TransactionItem(
-              title: 'Salary',
-              subtitle: 'Income',
-              amount: '+₹6,500',
-              color: Colors.green,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
