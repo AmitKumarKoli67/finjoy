@@ -36,7 +36,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const AddTransactionScreen()),
-            );
+            ).then((_) {
+              // refresh dashboard when coming back
+              setState(() {});
+            });
           } else {
             setState(() => _currentIndex = index);
           }

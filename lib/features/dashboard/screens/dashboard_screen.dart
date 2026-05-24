@@ -90,15 +90,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                ...transactions.map(
-                  (t) => TransactionItem(
-                    title: t.title,
-                    subtitle: t.category,
-                    amount:
-                        '${t.isIncome ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
-                    color: t.isIncome ? Colors.green : Colors.red,
-                  ),
-                ),
+                transactions.isEmpty
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(32),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.receipt_long,
+                                color: Colors.grey,
+                                size: 48,
+                              ),
+                              SizedBox(height: 12),
+                              Text(
+                                'No transactions yet',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Tap + to add your first transaction',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Column(
+                        children: transactions
+                            .map(
+                              (t) => TransactionItem(
+                                title: t.title,
+                                subtitle: t.category,
+                                amount:
+                                    '${t.isIncome ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
+                                color: t.isIncome ? Colors.green : Colors.red,
+                              ),
+                            )
+                            .toList(),
+                      ),
               ],
             ),
           );
