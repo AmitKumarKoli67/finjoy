@@ -93,6 +93,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             amount:
                                 '${t.isIncome ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
                             color: t.isIncome ? Colors.green : Colors.red,
+                            onDelete: () {
+                              context
+                                  .read<TransactionCubit>()
+                                  .deleteTransaction(t.id);
+                            },
                           );
                         },
                       ),
