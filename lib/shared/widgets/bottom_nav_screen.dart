@@ -1,4 +1,5 @@
 import 'package:finjoy/features/transactions/screens/add_transaction_screen.dart';
+import 'package:finjoy/features/transactions/screens/transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finjoy/features/dashboard/screens/dashboard_screen.dart';
 // import other screens later
@@ -15,7 +16,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   final List<Widget> _screens = [
     const DashboardScreen(),
-    const Placeholder(), // Activity
+    const TransactionsScreen(),
     const Placeholder(), // Add
     const Placeholder(), // Settings
   ];
