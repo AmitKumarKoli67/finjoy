@@ -1,3 +1,4 @@
+import 'package:finjoy/features/dashboard/screens/dashboard_screen.dart';
 import 'package:finjoy/shared/widgets/bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +10,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
+  double _opacity = 0.0;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
+
+    // Start fade in
+    Future.delayed(const Duration(milliseconds: 300), () {
+      setState(() => _opacity = 1.0);
+    });
+
+    // Navigate after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => BottomNavScreen()),
+        MaterialPageRoute(builder: (_) => const BottomNavScreen()),
       );
     });
   }
@@ -23,29 +33,50 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0D0D1A),
+      backgroundColor: const Color(0xFF0D0D1A),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Finjoy',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF7C6FFF),
+        child: AnimatedOpacity(
+          opacity: _opacity,
+          duration: const Duration(seconds: 1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF7C6FFF), Color(0xFF5B4FE8)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.account_balance_wallet,
+                  color: Colors.white,
+                  size: 40,
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Track. Save. Enjoy.',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+              const SizedBox(height: 20),
+              const Text(
+                'Finjoy',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF7C6FFF),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              const Text(
+                'Track. Save. Enjoy.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white60,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
