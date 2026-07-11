@@ -1,4 +1,3 @@
-import 'package:finjoy/features/dashboard/screens/dashboard_screen.dart';
 import 'package:finjoy/shared/widgets/bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -70,10 +69,7 @@ class SplashScreenState extends State<SplashScreen> {
               const SizedBox(height: 8),
               const Text(
                 'Track. Save. Enjoy.',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white60,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.white60),
               ),
             ],
           ),

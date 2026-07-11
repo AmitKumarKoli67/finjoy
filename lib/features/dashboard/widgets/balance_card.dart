@@ -17,25 +17,25 @@ class BalanceCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Total Balance',
             style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
-            '₹42,850.00',
-            style: TextStyle(
+            balance,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
-          Text(
-            '3 Linked Accounts',
+          const SizedBox(height: 8),
+          const Text(
+            'Finjoy Wallet',
             style: TextStyle(color: Colors.white70, fontSize: 12),
           ),
         ],

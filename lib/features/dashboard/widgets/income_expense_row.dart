@@ -4,7 +4,11 @@ class IncomeExpenseRow extends StatelessWidget {
   final String income;
   final String expense;
 
-  const IncomeExpenseRow({super.key, required this.income, required this.expense, });
+  const IncomeExpenseRow({
+    super.key,
+    required this.income,
+    required this.expense,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +21,18 @@ class IncomeExpenseRow extends StatelessWidget {
               color: const Color(0xFF1A1A2E),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.arrow_downward, color: Colors.green),
-                SizedBox(height: 8),
-                Text(
+                const Icon(Icons.arrow_downward, color: Colors.green),
+                const SizedBox(height: 8),
+                const Text(
                   'Income',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
                 Text(
-                  '+₹8,400',
-                  style: TextStyle(
+                  income, // ← using parameter now
+                  style: const TextStyle(
                     color: Colors.green,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -46,18 +50,18 @@ class IncomeExpenseRow extends StatelessWidget {
               color: const Color(0xFF1A1A2E),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.arrow_upward, color: Colors.red),
-                SizedBox(height: 8),
-                Text(
+                const Icon(Icons.arrow_upward, color: Colors.red),
+                const SizedBox(height: 8),
+                const Text(
                   'Expense',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
                 Text(
-                  '-₹3,120',
-                  style: TextStyle(
+                  expense,
+                  style: const TextStyle(
                     color: Colors.red,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
