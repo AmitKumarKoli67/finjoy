@@ -1,4 +1,5 @@
 import 'package:finjoy/data/models/transaction_model.dart';
+import 'package:finjoy/features/budgets/screens/budget_screen.dart';
 import 'package:finjoy/features/dashboard/widgets/balance_card.dart';
 import 'package:finjoy/features/dashboard/widgets/income_expense_row.dart';
 import 'package:finjoy/features/dashboard/widgets/transaction_item.dart';
@@ -80,6 +81,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   income: '+₹${totalIncome.toStringAsFixed(2)}',
                   expense: '-₹${totalExpense.toStringAsFixed(2)}',
                 ),
+                SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => BudgetScreen()),
+                      );
+                    },
+                    icon: Icon(Icons.pie_chart, color: Color(0xFF7C6FFF)),
+                    label: Text(
+                      'View Budgets',
+                      style: TextStyle(color: Color(0xFF7C6FFF)),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Color(0xFF7C6FFF)),
+                      padding: const EdgeInsets.all(14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 24),
                 const Text(
                   'Recent Transactions',
@@ -129,7 +154,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 subtitle: t.category ?? '',
                                 amount:
                                     '${t.type == 'income' ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
-                                color: t.type == 'income' ? Colors.green : Colors.red,
+                                color: t.type == 'income'
+                                    ? Colors.green
+                                    : Colors.red,
                               ),
                             )
                             .toList(),

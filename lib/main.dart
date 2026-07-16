@@ -1,3 +1,5 @@
+import 'package:finjoy/data/repositories/budget_repository.dart';
+import 'package:finjoy/features/dashboard/cubit/budget_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/api_service.dart';
@@ -25,6 +27,7 @@ class FinjoyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => TransactionCubit(TransactionRepository(apiService)),
         ),
+        BlocProvider(create: (_) => BudgetCubit(BudgetRepository(apiService))),
       ],
       child: MaterialApp(
         title: 'Finjoy',

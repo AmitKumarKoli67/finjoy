@@ -1,6 +1,5 @@
 import 'package:finjoy/core/services/api_service.dart';
 import 'package:finjoy/data/models/transaction_model.dart';
-import 'package:hive/hive.dart';
 
 class TransactionRepository {
  final ApiService apiService;
