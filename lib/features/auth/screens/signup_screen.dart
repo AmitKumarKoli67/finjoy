@@ -1,7 +1,7 @@
+import 'package:finjoy/shared/widgets/bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/auth_cubit.dart';
-import '../../dashboard/screens/dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -37,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
               listener: (context, state) {
                 if (state is AuthAuthenticated) {
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                    MaterialPageRoute(builder: (_) => const BottomNavScreen()),
                     (route) => false,
                   );
                 } else if (state is AuthError) {
