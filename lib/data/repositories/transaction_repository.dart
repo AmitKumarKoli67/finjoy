@@ -1,24 +1,29 @@
+import 'package:finjoy/core/services/api_service.dart';
 import 'package:finjoy/data/models/transaction_model.dart';
 import 'package:hive/hive.dart';
 
 class TransactionRepository {
-  static const String boxName = 'transactions';
+ final ApiService apiService;
 
-  Future<Box<TransactionModel>> get _box async =>
-      Hive.box<TransactionModel>(boxName);
+ TransactionRepository(this.apiService);
 
-  Future<List<TransactionModel>> getAllTransactions() async {
-    final box = await _box;
-    return box.values.toList();
-  }
+ Future<List<TransactionModel>> getAllTransactions() async {
+  final data = await apiService.get("/transactions");
+  return (data as List)
+  .map((json) => TransactionModel.fromJson(json))
+  .toList();
+ }
 
-  Future<void> addTransaction(TransactionModel transaction) async {
-    final box = await _box;
-    await box.put(transaction.id, transaction);
-  }
+ Future<void> addTransaction(TransactionModel transaction) async {
+  await apiService.post('/transactions', {
+    'type': transaction. type,
+    'amount': transaction.amount,
+    'category': transaction.category,
+    'note': transaction.note,
+  });
+ }
 
-  Future<void> deleteTransaction(String id) async {
-    final box = await _box;
-    await box.delete(id);
-  }
+ Future<void> deleteTransaction(String id) async {
+  await apiService.delete('/transactions/$id');
+ }
 }

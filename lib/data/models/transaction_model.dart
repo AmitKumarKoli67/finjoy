@@ -1,33 +1,29 @@
-import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'transaction_model.g.dart';
 
-@HiveType(typeId: 0)
-class TransactionModel extends HiveObject {
-  @HiveField(0)
-  final String id;
+@JsonSerializable()
+class TransactionModel {
+  @JsonKey(name: '_id')
+  final String? id;
 
-  @HiveField(1)
-  final String title;
-
-  @HiveField(2)
+  final String type;
   final double amount;
-
-  @HiveField(3)
-  final String category;
-
-  @HiveField(4)
-  final DateTime date;
-
-  @HiveField(5)
-  final bool isIncome;
+  final String? category;
+  final String? note;
+  final DateTime? date;
 
   TransactionModel({
-    required this.id,
-    required this.title,
+    this.id,
+    required this.type,
     required this.amount,
     required this.category,
-    required this.date,
-    required this.isIncome,
+    this.note,
+    this.date,
   });
+
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransactionModelToJson(this);
 }

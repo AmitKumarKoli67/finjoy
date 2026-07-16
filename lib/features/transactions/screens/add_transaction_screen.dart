@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 import '../../../data/models/transaction_model.dart';
 import '../cubit/transaction_cubit.dart';
 
@@ -12,14 +11,19 @@ class AddTransactionScreen extends StatefulWidget {
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
-  final _titleController = TextEditingController();
+  final _noteController = TextEditingController();
   final _amountController = TextEditingController();
-  bool _isIncome = false;
+  String _type = 'expense';
   String _selectedCategory = 'Food';
 
   final List<String> _categories = [
-    'Food', 'Transport', 'Shopping',
-    'Bills', 'Health', 'Income', 'Other'
+    'Food',
+    'Transport',
+    'Shopping',
+    'Bills',
+    'Health',
+    'Income',
+    'Other',
   ];
 
   @override
@@ -36,23 +40,24 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Income / Expense Toggle
             Row(
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => setState(() => _isIncome = false),
+                    onTap: () => setState(() => _type = 'expense'),
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: !_isIncome
+                        color: _type == 'expense'
                             ? Colors.red
                             : const Color(0xFF1A1A2E),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(
-                        child: Text('Expense',
-                            style: TextStyle(color: Colors.white)),
+                        child: Text(
+                          'Expense',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
@@ -60,33 +65,32 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => setState(() => _isIncome = true),
+                    onTap: () => setState(() => _type = 'income'),
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: _isIncome
+                        color: _type == 'income'
                             ? Colors.green
                             : const Color(0xFF1A1A2E),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(
-                        child: Text('Income',
-                            style: TextStyle(color: Colors.white)),
+                        child: Text(
+                          'Income',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
-            // Title Field
             TextField(
-              controller: _titleController,
+              controller: _noteController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                labelText: 'Title',
+                labelText: 'Note',
                 labelStyle: const TextStyle(color: Colors.grey),
                 filled: true,
                 fillColor: const Color(0xFF1A1A2E),
@@ -96,10 +100,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Amount Field
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
@@ -115,12 +116,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Category
-            const Text('Category',
-                style: TextStyle(color: Colors.grey, fontSize: 14)),
+            const Text(
+              'Category',
+              style: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -138,10 +138,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 );
               }).toList(),
             ),
-
             const SizedBox(height: 24),
-
-            // Save Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -153,8 +150,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text('Save Transaction',
-                    style: TextStyle(fontSize: 16, color: Colors.white)),
+                child: const Text(
+                  'Save Transaction',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -164,15 +163,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   void _saveTransaction() {
-    if (_titleController.text.isEmpty || _amountController.text.isEmpty) return;
+    if (_amountController.text.isEmpty) return;
 
     final transaction = TransactionModel(
-      id: const Uuid().v4(),
-      title: _titleController.text,
+      type: _type,
       amount: double.parse(_amountController.text),
       category: _selectedCategory,
-      date: DateTime.now(),
-      isIncome: _isIncome,
+      note: _noteController.text.isEmpty ? null : _noteController.text,
     );
 
     context.read<TransactionCubit>().addTransaction(transaction);

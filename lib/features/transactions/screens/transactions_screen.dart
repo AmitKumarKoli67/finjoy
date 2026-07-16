@@ -36,9 +36,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           // Filter logic
           List<TransactionModel> filtered = transactions;
           if (_filter == 'Income') {
-            filtered = transactions.where((t) => t.isIncome).toList();
+            filtered = transactions.where((t) => t.type == 'income').toList();
           } else if (_filter == 'Expense') {
-            filtered = transactions.where((t) => !t.isIncome).toList();
+            filtered = transactions.where((t) => t.type == 'expense').toList();
           }
 
           return Column(
@@ -88,15 +88,15 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                         itemBuilder: (context, index) {
                           final t = filtered[index];
                           return TransactionItem(
-                            title: t.title,
-                            subtitle: t.category,
+                            title: t.note ?? t.category ?? 'Transaction',
+                            subtitle: t.category ?? '',
                             amount:
-                                '${t.isIncome ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
-                            color: t.isIncome ? Colors.green : Colors.red,
+                                '${t.type == 'income' ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
+                            color: t.type == 'income' ? Colors.green : Colors.red,
                             onDelete: () {
                               context
                                   .read<TransactionCubit>()
-                                  .deleteTransaction(t.id);
+                                  .deleteTransaction(t.id!);
                             },
                           );
                         },

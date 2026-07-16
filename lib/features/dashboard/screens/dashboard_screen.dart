@@ -60,13 +60,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           double totalBalance = transactions.fold(
             0,
-            (sum, t) => t.isIncome ? sum + t.amount : sum - t.amount,
+            (sum, t) => t.type == 'income' ? sum + t.amount : sum - t.amount,
           );
           double totalIncome = transactions
-              .where((t) => t.isIncome)
+              .where((t) => t.type == 'income')
               .fold(0, (sum, t) => sum + t.amount);
           double totalExpense = transactions
-              .where((t) => !t.isIncome)
+              .where((t) => t.type == 'expense')
               .fold(0, (sum, t) => sum + t.amount);
 
           return SingleChildScrollView(
@@ -125,11 +125,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: transactions
                             .map(
                               (t) => TransactionItem(
-                                title: t.title,
-                                subtitle: t.category,
+                                title: t.note ?? t.category ?? 'Transaction',
+                                subtitle: t.category ?? '',
                                 amount:
-                                    '${t.isIncome ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
-                                color: t.isIncome ? Colors.green : Colors.red,
+                                    '${t.type == 'income' ? '+' : '-'}₹${t.amount.toStringAsFixed(2)}',
+                                color: t.type == 'income' ? Colors.green : Colors.red,
                               ),
                             )
                             .toList(),

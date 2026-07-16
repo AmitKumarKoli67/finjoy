@@ -3,54 +3,26 @@
 part of 'transaction_model.dart';
 
 // **************************************************************************
-// TypeAdapterGenerator
+// JsonSerializableGenerator
 // **************************************************************************
 
-class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
-  @override
-  final int typeId = 0;
-
-  @override
-  TransactionModel read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return TransactionModel(
-      id: fields[0] as String,
-      title: fields[1] as String,
-      amount: fields[2] as double,
-      category: fields[3] as String,
-      date: fields[4] as DateTime,
-      isIncome: fields[5] as bool,
+TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) =>
+    TransactionModel(
+      id: json['_id'] as String?,
+      type: json['type'] as String,
+      amount: (json['amount'] as num).toDouble(),
+      category: json['category'] as String?,
+      note: json['note'] as String?,
+      date:
+          json['date'] == null ? null : DateTime.parse(json['date'] as String),
     );
-  }
 
-  @override
-  void write(BinaryWriter writer, TransactionModel obj) {
-    writer
-      ..writeByte(6)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.title)
-      ..writeByte(2)
-      ..write(obj.amount)
-      ..writeByte(3)
-      ..write(obj.category)
-      ..writeByte(4)
-      ..write(obj.date)
-      ..writeByte(5)
-      ..write(obj.isIncome);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TransactionModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
+Map<String, dynamic> _$TransactionModelToJson(TransactionModel instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'type': instance.type,
+      'amount': instance.amount,
+      'category': instance.category,
+      'note': instance.note,
+      'date': instance.date?.toIso8601String(),
+    };
