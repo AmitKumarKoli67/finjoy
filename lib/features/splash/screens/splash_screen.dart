@@ -1,5 +1,8 @@
+import 'package:finjoy/features/auth/screens/login_screen.dart';
 import 'package:finjoy/shared/widgets/bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../auth/cubit/auth_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,16 +18,24 @@ class SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // Start fade in
     Future.delayed(const Duration(milliseconds: 300), () {
       setState(() => _opacity = 1.0);
     });
 
-    // Navigate after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
+      final isLoggedIn = await context
+          .read<AuthCubit>()
+          .repository
+          .isLoggedIn();
+
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const BottomNavScreen()),
+        MaterialPageRoute(
+          builder: (_) =>
+              isLoggedIn ? const BottomNavScreen() : const LoginScreen(),
+        ),
       );
     });
   }

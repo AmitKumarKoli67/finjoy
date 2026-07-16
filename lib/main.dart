@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'core/services/api_service.dart';
 import 'data/models/transaction_model.dart';
 import 'data/repositories/transaction_repository.dart';
+import 'features/auth/cubit/auth_cubit.dart';
+import 'features/auth/repositories/auth_repository.dart';
 import 'features/splash/screens/splash_screen.dart';
 import 'features/transactions/cubit/transaction_cubit.dart';
 
@@ -19,8 +22,13 @@ class FinjoyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => TransactionCubit(TransactionRepository()),
+    final apiService = ApiService();
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthCubit(AuthRepository(apiService))),
+        BlocProvider(create: (_) => TransactionCubit(TransactionRepository())),
+      ],
       child: MaterialApp(
         title: 'Finjoy',
         debugShowCheckedModeBanner: false,
