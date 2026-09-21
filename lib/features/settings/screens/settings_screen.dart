@@ -93,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onChanged: (value) {
                       setState(() => _isDarkMode = value);
                     },
-                    activeColor: const Color(0xFF7C6FFF),
+                    activeThumbColor: const Color(0xFF7C6FFF),
                   ),
                 ],
               ),

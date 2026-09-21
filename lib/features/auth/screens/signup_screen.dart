@@ -64,8 +64,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       decoration: const InputDecoration(labelText: 'Email'),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Enter your email';
-                        if (!value.contains('@')) return 'Enter a valid email';
+                        if (value == null || value.isEmpty) {
+                          return 'Enter your email';
+                        }
+                        if (!value.contains('@')) {
+                          return 'Enter a valid email';
+                        }
                         return null;
                       },
                     ),
@@ -75,7 +79,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       decoration: const InputDecoration(labelText: 'Password'),
                       obscureText: true,
                       validator: (value) {
-                        if (value == null || value.length < 6) return 'Min 6 characters';
+                        if (value == null || value.length < 6) {
+                          return 'Min 6 characters';
+                        }
                         return null;
                       },
                     ),

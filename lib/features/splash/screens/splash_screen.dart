@@ -23,10 +23,9 @@ class SplashScreenState extends State<SplashScreen> {
     });
 
     Future.delayed(const Duration(seconds: 3), () async {
-      final isLoggedIn = await context
-          .read<AuthCubit>()
-          .repository
-          .isLoggedIn();
+      if (!mounted) return;
+      final authCubit = context.read<AuthCubit>();
+      final isLoggedIn = await authCubit.repository.isLoggedIn();
 
       if (!mounted) return;
 

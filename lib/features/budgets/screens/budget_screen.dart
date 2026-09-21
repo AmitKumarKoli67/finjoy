@@ -94,8 +94,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   ),
                   onPressed: () {
                     if (_categoryController.text.isEmpty ||
-                        _limitController.text.isEmpty)
+                        _limitController.text.isEmpty) {
                       return;
+                    }
 
                     context.read<BudgetCubit>().addBudget(
                       _categoryController.text,
