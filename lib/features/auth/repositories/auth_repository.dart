@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:finjoy/core/services/api_service.dart';
 import 'package:finjoy/features/auth/models/user_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +10,25 @@ class AuthRepository {
 
   AuthRepository(this.apiService);
 
+  static const _userKey = 'current_user';
+
+  Future<void> _saveUser(UserModel user) async {
+    await storage.write(
+      key: _userKey,
+      value: jsonEncode(user.toJson()),
+    );
+  }
+
+  Future<UserModel?> getStoredUser() async {
+    final value = await storage.read(key: _userKey);
+
+    if (value == null) {
+      return null;
+    }
+
+    return UserModel.fromJson(jsonDecode(value) as Map<String, dynamic>);
+  }
+
   Future<UserModel> register(String name, String email, String password) async {
     final data = await apiService.post('/auth/register', {
       'name': name,
@@ -17,18 +38,22 @@ class AuthRepository {
 
     await storage.write(key: 'jwt_token', value: data['token']);
 
-    return UserModel.fromJson(data['user']);
+    final user = UserModel.fromJson(data['user']);
+    await _saveUser(user);
+    return user;
   }
 
   Future<UserModel> login(String email, String password) async {
     final data = await apiService.post('/auth/login', {
       'email': email,
       'password': password,
-    }, withAuth:false);
+    }, withAuth: false);
 
     await storage.write(key: 'jwt_token', value: data['token']);
 
-    return UserModel.fromJson(data['user']);
+    final user = UserModel.fromJson(data['user']);
+    await _saveUser(user);
+    return user;
   }
 
   Future<void> logout() async {

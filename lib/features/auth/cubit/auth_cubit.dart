@@ -49,4 +49,25 @@ class AuthCubit extends Cubit<AuthState> {
     await repository.logout();
     emit(AuthUnauthenticated());
   }
+
+  UserModel? get currentUser {
+    final currentState = state;
+
+    if(currentState is AuthAuthenticated) {
+      return currentState.user;
+    }
+
+    return null;
+  }
+
+  Future<void> restoreSession() async {
+    final user = await repository.getStoredUser();
+    final isLoggedIn = await repository.isLoggedIn();
+
+    if(isLoggedIn && user != null) {
+      emit(AuthAuthenticated(user));
+    } else {
+      emit(AuthUnauthenticated());
+    }
+  }
 }

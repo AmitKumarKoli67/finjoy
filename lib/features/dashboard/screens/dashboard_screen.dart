@@ -1,4 +1,5 @@
 import 'package:finjoy/data/models/transaction_model.dart';
+import 'package:finjoy/features/auth/cubit/auth_cubit.dart';
 import 'package:finjoy/features/budgets/screens/budget_screen.dart';
 import 'package:finjoy/features/dashboard/widgets/balance_card.dart';
 import 'package:finjoy/features/dashboard/widgets/income_expense_row.dart';
@@ -23,26 +24,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = context.watch<AuthCubit>().state;
+    final user = authState is AuthAuthenticated ? authState.user : null;
+
+    final hour = DateTime.now().hour;
+    final greeting = hour < 12
+        ? 'Good Morning'
+        : hour < 17
+        ? 'Good Afternoon'
+        : 'Good Evening';
+
+    final userName = user?.name ?? 'User';
+    final initial = userName.isNotEmpty ? userName[0].toUpperCase() : 'U';
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D1A),
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D1A),
         elevation: 0,
-        leading: const CircleAvatar(
+        leading: CircleAvatar(
           backgroundColor: Color(0xFF7C6FFF),
-          child: Text('A', style: TextStyle(color: Colors.white)),
+          child: Text(initial, style: TextStyle(color: Colors.white)),
         ),
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hey Amit 👋',
+              'Hey $userName 👋',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
-            Text(
-              'Good Morning',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
+            Text(greeting, style: TextStyle(fontSize: 12, color: Colors.grey)),
           ],
         ),
         actions: [
