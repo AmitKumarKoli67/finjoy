@@ -15,6 +15,8 @@ class AuthRepository {
       'password': password,
     }, withAuth: false);
 
+    await storage.write(key: 'jwt_token', value: data['token']);
+
     return UserModel.fromJson(data['user']);
   }
 
@@ -30,7 +32,7 @@ class AuthRepository {
   }
 
   Future<void> logout() async {
-    await storage.delete(key: 'jwt_token');
+    await storage.deleteAll();
   }
 
   Future<bool> isLoggedIn() async {
